@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home  Page</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 <body class="h-full">
 <div class="min-h-full">
@@ -21,7 +24,9 @@
               @auth
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
                 <x-nav-link href="/dashboard" :active="request() -> is('dashboard')">Dashboard</x-nav-link>
-                <x-nav-link href="/jobs" :active="request() -> is('jobs')">Jobs</x-nav-link>
+                <x-nav-link href="/customers" :active="request() -> is('customers')">Customers</x-nav-link>
+                <x-nav-link href="/jobs" :active="request()->is('jobs*')">Jobs</x-nav-link>
+                <x-nav-link href="/jobModal" :active="request()->is('jobModal*')">Jobs Modal </x-nav-link>
                 <x-nav-link href="/contact" :active="request() -> is('contact')">Contact</x-nav-link>
               @endauth
             </div>

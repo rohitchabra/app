@@ -7,7 +7,12 @@ use App\Models\Job;
 use Illuminate\Contracts\Session\Session;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\RegisteredController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobPhotoController;
+
+Route::resource('customers', CustomerController::class);
+Route::resource('jobs', JobController::class);
 
 Route::get('/', function () {
     return view('home');
@@ -30,6 +35,23 @@ Route::get('/dashboard', function () {
 Route::get('/contact', function () {
     return view('contact');
 });
+
+// Customer CRUD
+Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+
+Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
+Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+
+Route::get('/customers/{customer}', [CustomerController::class, 'show'])
+    ->name('customers.show');
+
+
+Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])
+    ->name('jobs.photos.destroy');
+
 
 Route::middleware('guest')->group(function () {
 
