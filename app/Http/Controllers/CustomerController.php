@@ -14,7 +14,19 @@ class CustomerController extends Controller
         return view('customers.index', compact('customers'));
     }
 
-    public function store(Request $request)
+    public function store(CustomerStoreRequest $request)
+    {
+        // Customer::create($request->validated());
+
+        $customer = Customer::create($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Customer created successfully'
+        ]);
+    }
+
+    public function store1(Request $request)
     {
         $request->validate([
             'name' => 'required',

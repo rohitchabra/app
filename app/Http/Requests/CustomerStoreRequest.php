@@ -19,4 +19,12 @@ class CustomerStoreRequest extends FormRequest
             'phone' => 'required|string|max:20',
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'Name is required.',
+            'email.email' => 'Please enter a valid email address.',
+        ];
+    }
 }

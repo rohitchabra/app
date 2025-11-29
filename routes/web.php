@@ -52,7 +52,6 @@ Route::get('/customers/{customer}', [CustomerController::class, 'show'])
 Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])
     ->name('jobs.photos.destroy');
 
-
 Route::middleware('guest')->group(function () {
 
     // Route::get('login', [LoginController::class, 'index']);

@@ -1,28 +1,7 @@
 <x-layout>
     <x-slot:heading>
-        Job Details
+        
     </x-slot:heading>
-
-
-    {{-- <div class="container">
-    <h1>{{ $job->title }}</h1>
-    <p>Customer: <a href="{{ route('customers.show', $job->customer) }}">{{ $job->customer->name }}</a></p>
-    <p>{{ $job->description }}</p>
-
-    <h3>Photos</h3>
-    <div class="grid">
-        @foreach($job->photos as $photo)
-            <div class="photo-card">
-                <img src="{{ asset('storage/'.$photo->path) }}" alt="{{ $photo->filename }}" style="max-width:200px;">
-                <form action="{{ route('jobs.photos.destroy', ['job' => $job->id, 'photo' => $photo->id]) }}" method="POST" onsubmit="return confirm('Delete photo?');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit">Delete</button>
-                </form>
-            </div>
-        @endforeach
-    </div>
-</div> --}}
 
     <div class="space-y-4">
 

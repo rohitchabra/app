@@ -8,64 +8,57 @@ use App\Models\JobPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreJobRequest;
 
 class JobController extends Controller
 {
     public function index()
     {
-        // dd('index jobs');
-        // eager load customer and photos
         $jobs = Job::with(['customer','photos'])->paginate(15);
         return view('jobs.index', compact('jobs'));
     }
 
     public function create()
     {
-        //dd('index jobs');
-        // pass customers list to select which customer owns the job
         $customers = Customer::orderBy('name')->get();
         return view('jobs.create', compact('customers'));
-        //return view('jobs.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreJobRequest $request)
     {
-        //dd('index jobs');
-        $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'photos.*' => 'nullable|image|max:5120', // each file max 5MB
-        ]);
-
+        //dd('store jobs');
         DB::beginTransaction();
+
         try {
             $job = Job::create([
-                'customer_id' => $validated['customer_id'],
-                'title' => $validated['title'],
-                'description' => $validated['description'] ?? null,
+                'customer_id' => $request->customer_id,
+                'title'       => $request->title,
+                'description' => $request->description,
             ]);
 
-            // handle multiple photos
             if ($request->hasFile('photos')) {
                 foreach ($request->file('photos') as $file) {
-                    $path = $file->store('jobs/'.$job->id, 'public'); // e.g. jobs/1/abc.jpg
+                    $path = $file->store('jobs/'.$job->id, 'public');
 
                     $job->photos()->create([
-                        'path' => $path,
+                        'path'     => $path,
                         'filename' => $file->getClientOriginalName(),
-                        'mime' => $file->getClientMimeType(),
-                        'size' => $file->getSize(),
+                        'mime'     => $file->getClientMimeType(),
+                        'size'     => $file->getSize(),
                     ]);
                 }
             }
 
             DB::commit();
-            return redirect()->route('jobs.show', $job)->with('success','Job created.');
-        } catch (\Throwable $e) {
+            return redirect()->route('jobs.show', $job)
+                            ->with('success', 'Job created.');
+        }
+
+        catch (\Throwable $e) {
             DB::rollBack();
-            // optionally delete files already stored if any
-            return back()->withInput()->withErrors(['error' => 'Failed to create job: '.$e->getMessage()]);
+            return back()->withInput()->withErrors([
+                'error' => 'Failed to create job: '.$e->getMessage()
+            ]);
         }
     }
 
@@ -78,10 +71,8 @@ class JobController extends Controller
 
     public function edit(Job $job)
     {
-        dd('edit job');
-        $customers = Customer::orderBy('name')->get();
-        $job->load('photos');
-        return view('jobs.edit', compact('job','customers'));
+        $customers = Customer::all();
+        return view('jobs.edit', compact('job', 'customers'));
     }
 
     public function update(Request $request, Job $job)
