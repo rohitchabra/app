@@ -16,35 +16,39 @@ class CustomerController extends Controller
 
     public function store(CustomerStoreRequest $request)
     {
-        // Customer::create($request->validated());
-
         $customer = Customer::create($request->validated());
 
         return response()->json([
             'success' => true,
-            'message' => 'Customer created successfully'
+            'message' => 'Customer created successfully',
+            'customer' => $customer,
         ]);
     }
 
-    public function store1(Request $request)
+    public function update(CustomerStoreRequest $request, Customer $customer)
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'nullable|email',
-            'phone' => 'nullable'
-        ]);
+        $customer->update($request->validated());
 
-        Customer::create($request->all());
-        return back()->with('success', 'Customer added!');
-    }
+        // If AJAX/JSON request, return JSON
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Customer updated successfully',
+                'customer' => $customer,
+            ]);
+        }
 
-    public function update(Request $request, $id)
-    {
-        $customer = Customer::findOrFail($id);
-
-        $customer->update($request->all());
-
+        // fallback for non-ajax form submissions
         return back()->with('success', 'Customer updated!');
+    }
+
+    public function show(Customer $customer)
+    {
+        // Return JSON for AJAX fetch (so edit can fetch the single customer)
+        if (request()->expectsJson()) {
+            return response()->json($customer);
+        }
+        return view('customers.show', compact('customer'));
     }
 
     public function destroy($id)
@@ -53,5 +57,4 @@ class CustomerController extends Controller
         return back()->with('success', 'Customer deleted!');
     }
 }
-
 

@@ -36,21 +36,21 @@ Route::get('/contact', function () {
     return view('contact');
 });
 
-// Customer CRUD
-Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
-Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
-Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+Route::middleware('auth')->group(function () {
+    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
+    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
+    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
+    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
+    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
 
-Route::get('/create', [JobController::class, 'create'])->name('jobs.create');
-Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
-Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+    Route::get('/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
+    Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
+    Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
 
-Route::get('/customers/{customer}', [CustomerController::class, 'show'])
-    ->name('customers.show');
+    Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])->middleware('auth')->name('jobs.photos.destroy');
+});
 
 
-Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])
-    ->name('jobs.photos.destroy');
 
 Route::middleware('guest')->group(function () {
 
