@@ -30,7 +30,11 @@ class CustomerStoreRequest extends FormRequest
                 // unique, but ignore current id when updating
                 Rule::unique('customers', 'email')->ignore($customerId),
             ],
-            'phone' => ['required', 'string', 'max:20', 'digits:10'],
+            'phone' => [
+                'required', 'string', 'max:20', 'digits:10',
+                //'regex:/^\(?\d{3}\)?[-\s.]?\d{3}[-\s.]?\d{4}$/'
+            ],
+
         ];
     }
 
@@ -41,6 +45,7 @@ class CustomerStoreRequest extends FormRequest
             'email.required' => 'Email is required.',
             'email.email'    => 'Please enter a valid email address.',
             'phone.required' => 'Phone is required.',
+            //'phone.regex' => 'Phone format must be like (616) 966-3430.'
         ];
     }
 }

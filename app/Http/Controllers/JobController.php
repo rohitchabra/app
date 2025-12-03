@@ -9,24 +9,28 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreJobRequest;
+use App\Models\Trade;
 
 class JobController extends Controller
 {
     public function index()
     {
-        $jobs = Job::with(['customer','photos'])->paginate(15);
+        
+        $jobs = Job::with(['customer','photos', 'trades'])->latest()->paginate(15);
+        //dd($jobs->all(),'index jobs');
         return view('jobs.index', compact('jobs'));
     }
 
     public function create()
     {
         $customers = Customer::orderBy('name')->get();
-        return view('jobs.create', compact('customers'));
+        $trades = Trade::orderBy('name')->get();
+        return view('jobs.create', compact('customers', 'trades'));
     }
 
     public function store(StoreJobRequest $request)
     {
-        //dd('store jobs');
+        //dd($request);
         DB::beginTransaction();
 
         try {
@@ -35,6 +39,10 @@ class JobController extends Controller
                 'title'       => $request->title,
                 'description' => $request->description,
             ]);
+
+            if ($request->trade_ids) {
+                $job->trades()->sync($request->trade_ids);
+            }
 
             if ($request->hasFile('photos')) {
                 foreach ($request->file('photos') as $file) {
@@ -65,14 +73,15 @@ class JobController extends Controller
     public function show(Job $job)
     {
         //dd('index jobs');
-        $job->load(['customer','photos']);
+        $job->load(['customer','photos', 'trades']);
         return view('jobs.show', compact('job'));
     }
 
     public function edit(Job $job)
     {
-        $customers = Customer::all();
-        return view('jobs.edit', compact('job', 'customers'));
+        $customers = Customer::orderBy('name')->get();
+        $trades = Trade::orderBy('name')->get();
+        return view('jobs.edit', compact('job', 'customers', 'trades'));
     }
 
     public function update(Request $request, Job $job)
@@ -92,6 +101,10 @@ class JobController extends Controller
                 'description' => $validated['description'] ?? null,
             ]);
 
+            if ($request->trade_ids) {
+                $job->trades()->sync($request->trade_ids);
+            }
+
             if ($request->hasFile('photos')) {
                 foreach ($request->file('photos') as $file) {
                     $path = $file->store('jobs/'.$job->id, 'public');
@@ -105,7 +118,7 @@ class JobController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('jobs.show', $job)->with('success','Job updated.');
+            return redirect()->route('jobs.index', $job)->with('success','Job updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
             return back()->withInput()->withErrors(['error' => 'Failed to update job: '.$e->getMessage()]);

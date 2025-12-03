@@ -9,10 +9,11 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\JobController;
-use App\Http\Controllers\JobPhotoController;
+use App\Http\Controllers\TradeController;
 
 Route::resource('customers', CustomerController::class);
 Route::resource('jobs', JobController::class);
+Route::resource('trades', TradeController::class);
 
 Route::get('/', function () {
     return view('home');
@@ -47,31 +48,17 @@ Route::middleware('auth')->group(function () {
     Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
     Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
 
+    Route::get('/trades', [TradeController::class, 'index'])->name('trades.index');
+    Route::get('/trades/create', [TradeController::class, 'create'])->name('trades.create');
+    Route::post('/trades', [TradeController::class, 'store'])->name('trades.store');
+    Route::get('/trades/{trade}/edit', [TradeController::class, 'edit'])->name('trades.edit');
+    Route::put('/trades/{trade}', [TradeController::class, 'update'])->name('trades.update');
+    Route::delete('/trades/{trade}', [TradeController::class, 'destroy'])->name('trades.destroy');
+
+    // Route::get('/trades', [TradeController::class, 'index'])->middleware('auth')->name('trades.index');
+    // Route::post('/trades', [TradeController::class, 'create'])->middleware('auth')->name('trades.create');
+    // Route::post('/trades', [TradeController::class, 'edit'])->middleware('auth')->name('trades.edit');
+
     Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])->middleware('auth')->name('jobs.photos.destroy');
 });
 
-
-
-Route::middleware('guest')->group(function () {
-
-    // Route::get('login', [LoginController::class, 'index']);
-    // Route::post('login', [LoginController::class, 'store']);
-
-    //Route::get('/register', [RegisteredUserController::class, 'create']);
-    //Route::post('/register', [RegisteredUserController::class, 'store']);
-
-});
-
-// Route::prefix('admin')->group(function () {
-//     Route::get('/dashboard', function () {
-//         return view('admin.dashboard');
-//     })->name('admin.dashboard');
-
-//     Route::get('/add', function () {
-//         return view('add');
-//     })->name('add');
-
-//     Route::get('/sub', function () {
-//         return view('sub');
-//     })->name('sub');
-// });

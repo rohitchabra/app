@@ -24,7 +24,27 @@
                 @endforeach
             </select>
         </div>
+        <div class="mb-4">
+            {{-- <label class="block mb-2 font-medium">Select Trades</label>
+                <select name="trade_ids[]" multiple class="border p-2 w-full rounded">
+                    @foreach($trades as $trade)
+                        <option value="{{ $trade->id }}"
+                            {{ $job->trades->contains($trade->id) ? 'selected' : '' }}>
+                            {{ $trade->name }}
+                        </option>
+                    @endforeach
+                </select> --}}
 
+            <label class="block font-semibold">Select Trades</label>
+            <select name="trade_ids[]" multiple class="border p-2 w-full rounded">
+                @foreach($trades as $trade)
+                    <option value="{{ $trade->id }}" 
+                        {{ $job->trades->contains($trade->id) ? 'selected' : '' }}>
+                        {{ $trade->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
         <div class="mb-4">
             <label class="block font-semibold">Upload Photos</label>
             <input type="file" name="photos[]" multiple class="border p-2 w-full">
@@ -39,6 +59,7 @@
                 @endforeach
             </div>
         </div>
+        
 
         <button class="bg-blue-600 text-white px-4 py-2 rounded">Update</button>
     </form>

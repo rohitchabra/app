@@ -1,0 +1,51 @@
+<x-layout>
+    <x-slot:heading>
+        
+    </x-slot:heading>
+    {{-- <h1 class="text-2xl font-bold mb-4">Trades</h1> --}}
+
+    <a href="{{ route('trades.create') }}"
+       class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
+        + Add Trade
+    </a>
+
+    @if (session('success'))
+        <p class="text-green-600 mb-4">{{ session('success') }}</p>
+    @endif
+
+    <table class="w-full border">
+        <thead>
+            <tr class="bg-gray-100">
+                <th class="border px-4 py-2">ID</th>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Actions</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            @foreach ($trades as $trade)
+                <tr>
+                    <td class="border px-4 py-2">{{ $trade->id }}</td>
+                    <td class="border px-4 py-2">{{ $trade->name }}</td>
+                    <td class="border px-4 py-2">
+                        {{-- || auth()->id() == 3 --}}
+                        @if($trade->id > 6)
+                            <a href="{{ route('trades.edit', $trade->id) }}"
+                            class="text-blue-600 mr-2">Edit</a>
+
+                            <form action="{{ route('trades.destroy', $trade->id) }}"
+                                method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button class="text-red-600"
+                                        onclick="return confirm('Delete trade?')">
+                                    Delete
+                                </button>
+                            </form>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
+</x-layout>

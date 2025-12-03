@@ -13,6 +13,22 @@
             {{ $job->description }}
         </p>
 
+        <div class="mt-4">
+            {{-- <h3 class="font-semibold text-lg">Trades</h3> --}}
+
+            @if ($job->trades->isEmpty())
+                <p class="text-gray-500">No trades assigned to this job.</p>
+            @else
+                <div class="flex flex-wrap gap-2 mt-2">
+                    @foreach ($job->trades as $trade)
+                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
+                            {{ $trade->name }}
+                        </span>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
         <!-- Photos -->
         <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
             @foreach ($job->photos as $photo)
