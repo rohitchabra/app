@@ -1,15 +1,21 @@
 <x-layout>
     <x-slot:heading>
-        Dashboard
+        
     </x-slot:heading>
 
-    {{-- <div class="max-w-3xl mx-auto mt-10">
-        <h2 class="text-2xl font-bold">Welcome to your Dashboard 🎉</h2>
-        <p class="text-gray-600 mt-2">You are logged in successfully.</p>
+    @for ($i = 0; $i < 3; $i++)
+        <div class="p-4 mb-4 bg-white rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">Card {{ $i + 1 }}</h2>
+            <p>This is the content of card {{ $i + 1 }}.</p>
+        </div>
+    @endfor
 
-        <form action="{{ route('logout') }}" method="POST" class="mt-4">
-            @csrf
-            <button class="px-4 py-2 bg-red-600 text-white rounded-md">Logout</button>
-        </form>
-    </div> --}}
+    {{-- @foreach ($products as $product)
+        <div class="p-4 mb-4 bg-white rounded shadow">
+            <h2 class="text-xl font-semibold mb-2">{{ $product->name }}</h2>
+            <p>{{ $product->description }}</p>
+        </div>
+        
+        
+    @endforeach --}}
 </x-layout>

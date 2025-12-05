@@ -13,7 +13,7 @@
             <tr class="bg-gray-100 border-b">
                 <th class="py-2 px-4 text-left">Job Title</th>
                 <th class="py-2 px-4 text-left">Customer</th>
-                {{-- <th class="py-2 px-4 text-left">Photos</th> --}}
+                <th class="py-2 px-4 text-left">Photos</th>
                 <th class="py-2 px-4 text-left">Trades</th>
                 <th class="py-2 px-4 text-left">Actions</th>
             </tr>
@@ -29,7 +29,7 @@
                     <td class="py-2 px-4">{{ $job->customer->name }}</td>
 
                     <!-- Photos Preview -->
-                    {{-- <td class="py-2 px-4">
+                    <td class="py-2 px-4">
                         <div class="flex space-x-2">
                             @foreach($job->photos->take(3) as $photo)
                                 <img 
@@ -44,7 +44,7 @@
                                 </span>
                             @endif
                         </div>
-                    </td> --}}
+                    </td>
 
                     <td class="py-2 px-4">
                         @foreach($job->trades as $trade)

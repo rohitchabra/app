@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Trade;
+use App\Models\Job;
 use Illuminate\Http\Request;
 
 class TradeController extends Controller
@@ -24,10 +25,14 @@ class TradeController extends Controller
             'name' => 'required|string|max:255|unique:trades,name'
         ]);
 
-        Trade::create($request->only('name'));
+        Trade::create([
+            'name'     => $request->name,
+            'trade_id' => 'custom',
+        ]);
 
         return redirect()->route('trades.index')->with('success', 'Trade created successfully.');
     }
+
 
     public function edit(Trade $trade)
     {
@@ -48,6 +53,14 @@ class TradeController extends Controller
 
     public function destroy(Trade $trade)
     {
+        $jobs = Job::whereHas('trades', function ($query) use ($trade) {
+            $query->where('trade_id', $trade->id);
+        })->get();
+
+        if ($jobs->isNotEmpty()) {
+            return redirect()->route('trades.index')->with('error', 'Cannot delete trade. It is associated with existing jobs.');
+        }
+                                
         $trade->delete();
         return redirect()->route('trades.index')->with('success', 'Trade deleted successfully.');
     }

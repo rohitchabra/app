@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\TradeController;
+use App\Http\Controllers\DashboardController;
 
 Route::resource('customers', CustomerController::class);
 Route::resource('jobs', JobController::class);
@@ -28,10 +29,15 @@ Route::get('/register', [RegisteredController::class, 'show'])->name('register')
 Route::post('/register', [RegisteredController::class, 'store']);
 
 // Protected Dashboard
-Route::get('/dashboard', function () {
-    return view('dashboard.index');
-})->middleware('auth')->name('dashboard');
+// Route::get('/dashboard', function () {
+//     return view('dashboard.index');
+// })->middleware('auth')->name('dashboard');
 
+// Route::get('/dashboard', [DashboardController::class, 'index'])
+//     ->middleware('auth')
+//     ->name('dashboard');
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/contact', function () {
     return view('contact');
@@ -60,5 +66,6 @@ Route::middleware('auth')->group(function () {
     // Route::post('/trades', [TradeController::class, 'edit'])->middleware('auth')->name('trades.edit');
 
     Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])->middleware('auth')->name('jobs.photos.destroy');
+
 });
 

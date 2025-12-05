@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Trade extends Model
 {
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'trade_id'];
 
 
     public function jobs(): BelongsToMany

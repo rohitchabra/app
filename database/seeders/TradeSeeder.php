@@ -19,6 +19,7 @@ class TradeSeeder extends Seeder
             'Solar',
             'Window',
             'Sliding',
+            'Door',
         ];
 
         $rows = array_map(function ($name) use ($now) {
@@ -29,6 +30,13 @@ class TradeSeeder extends Seeder
             ];
         }, $trades);
 
-        DB::table('trades')->insert($rows);
+        //DB::table('trades')->insert($rows);
+
+        //$trades = ['Carpentry','Roofing','Plumber','Solar','Window','Sliding','Door','AAA'];
+
+        foreach ($trades as $trade) {
+            \App\Models\Trade::firstOrCreate(['name' => $trade, 'trade_id' => 'system']);
+        }
+
     }
 }
