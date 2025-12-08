@@ -20,6 +20,8 @@ class TradeSeeder extends Seeder
             'Window',
             'Sliding',
             'Door',
+            'Gardening',
+            'Electrical',
         ];
 
         $rows = array_map(function ($name) use ($now) {

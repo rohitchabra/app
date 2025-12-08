@@ -49,10 +49,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
     Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
+    Route::get('/customers/{customer}/jobs', [CustomerController::class, 'jobs'])->name('customers.jobs');
 
     Route::get('/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
     Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
     Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
+
+    //Route::get('/jobs', [JobController::class, 'jobs'])->middleware('auth')->name('jobs.jobs');
 
     Route::get('/trades', [TradeController::class, 'index'])->name('trades.index');
     Route::get('/trades/create', [TradeController::class, 'create'])->name('trades.create');

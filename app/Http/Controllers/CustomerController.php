@@ -25,6 +25,11 @@ class CustomerController extends Controller
         ]);
     }
 
+    public function edit(Customer $customer)
+    {
+        return response()->json($customer);
+    }
+
     public function update(CustomerStoreRequest $request, Customer $customer)
     {
         $customer->update($request->validated());
@@ -42,19 +47,16 @@ class CustomerController extends Controller
         return back()->with('success', 'Customer updated!');
     }
 
-    public function show(Customer $customer)
-    {
-        // Return JSON for AJAX fetch (so edit can fetch the single customer)
-        if (request()->expectsJson()) {
-            return response()->json($customer);
-        }
-        return view('customers.show', compact('customer'));
-    }
-
     public function destroy($id)
     {
         Customer::findOrFail($id)->delete();
         return back()->with('success', 'Customer deleted!');
+    }
+
+    public function jobs(Customer $customer)
+    {
+        $customer->load(['jobs.trades', 'jobs.photos']);
+        return view('customers.modals.partials.jobs-list', compact('customer'));
     }
 }
 

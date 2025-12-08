@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             //document.getElementById('phone').style.backgroundColor = "#f1d5d5ff";
             // Try to fetch existing customer data via AJAX
             try {
-                const res = await fetch(`/customers/${id}`, {
+                const res = await fetch(`/customers/${id}` + '/edit', {
                     headers: {
                         'Accept': 'application/json'
                     }
