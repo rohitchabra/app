@@ -28,7 +28,7 @@
                 <x-nav-link href="/dashboard" :active="request() -> is('dashboard')">Dashboard</x-nav-link>
                 <x-nav-link href="/customers" :active="request() -> is('customers')">Customers</x-nav-link>
                 <x-nav-link href="/trades" :active="request() -> is('trades')">Trades</x-nav-link>
-                <x-nav-link href="/jobs" :active="request()->is('jobs*')">Jobs</x-nav-link>
+                <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
                 {{-- <x-nav-link href="/contact" :active="request() -> is('contact')">Contact</x-nav-link> --}}
               @endauth
             </div>

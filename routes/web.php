@@ -51,9 +51,10 @@ Route::middleware('auth')->group(function () {
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::get('/customers/{customer}/jobs', [CustomerController::class, 'jobs'])->name('customers.jobs');
 
-    Route::get('/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
-    Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
-    Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
+    // Route::get('/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
+    // Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
+    // Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
+    // Route::get('/jobs/search', [JobController::class, 'search'])->middleware('auth')->name('jobs.search');
 
     //Route::get('/jobs', [JobController::class, 'jobs'])->middleware('auth')->name('jobs.jobs');
 
@@ -69,6 +70,33 @@ Route::middleware('auth')->group(function () {
     // Route::post('/trades', [TradeController::class, 'edit'])->middleware('auth')->name('trades.edit');
 
     Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])->middleware('auth')->name('jobs.photos.destroy');
-
 });
 
+Route::middleware('auth')->group(function () {
+
+    // Job list
+    Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
+
+    // Search page
+    //Route::get('/job', [JobController::class, 'search'])->name('jobs.search');
+
+    Route::get('/jobs/{job}', [JobController::class, 'show']);
+
+    // Create job form
+    Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
+
+    // Store job
+    Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
+
+    // Show job
+    Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
+
+    // Edit job
+    Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->name('jobs.edit');
+
+    // Update job
+    Route::put('/jobs/{job}', [JobController::class, 'update'])->name('jobs.update');
+
+    // Delete job
+    Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+});

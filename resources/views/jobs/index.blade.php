@@ -3,11 +3,40 @@
         
     </x-slot:heading>
 
-    <a href="{{ route('jobs.create') }}" 
-        class="bg-green-600 text-white px-4 py-2 rounded inline-block mb-4">
-        + Add Job
-    </a>
-
+    <form action="{{ route('jobs.index') }}" method="GET">
+        <div class="container text-center">
+            <div class="row">   
+            <div class="col-3">
+                <select name="customer_id" class="w-full border p-2 rounded">
+                    <option value="">-- Select customer --</option>
+                    @foreach($customers as $c)
+                        <option value="{{ $c->id }}" 
+                            {{ request('customer_id') == $c->id ? 'selected' : '' }}>
+                            {{ $c->name }} ({{ $c->email ?? 'No email' }})
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-6">
+                <button class="bg-green-600 text-white px-4 py-2 rounded mt-2">
+                    Search
+                </button>
+                <a href="{{ route('jobs.index') }}" 
+                    class="bg-green-600 text-white px-4 py-2 rounded mt-2 inline-block">
+                        Clear
+                </a>
+                <a href="{{ route('jobs.create') }}" 
+                    class="bg-green-600 text-white px-4 py-2 rounded inline-block mb-4">
+                    Add Job
+                </a>
+            </div>
+            <div class="col-3">
+                
+            </div>
+            
+            </div>
+        </div>
+    </form>
     <table class="min-w-full bg-white border">
         <thead>
             <tr class="bg-gray-100 border-b">

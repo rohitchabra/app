@@ -2,41 +2,64 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Job;
-use App\Models\Customer;
-use App\Models\JobPhoto;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\DB;
 use App\Http\Requests\StoreJobRequest;
+use App\Models\Customer;
+use App\Models\Job;
+use App\Models\JobPhoto;
 use App\Models\Trade;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
-    public function index()
+    public function index1()
     {
-        
-        $jobs = Job::with(['customer','photos', 'trades'])->latest()->paginate(15);
-        //dd($jobs->all(),'index jobs');
-        return view('jobs.index', compact('jobs'));
+        $customers = Customer::orderBy('name')->get();
+            
+        $jobs = Job::with(['customer', 'photos', 'trades'])->latest()->paginate(15);
+
+        return view('jobs.index', compact('customers', 'jobs'));
+    }
+
+    public function index(Request $request)
+    {
+        $customers = Customer::orderBy('name')->get();
+
+        $selectedCustomer = null;
+        if ($request->customer_id) {
+            $selectedCustomer = Customer::find($request->customer_id);
+        }
+
+        // Jobs with filter
+        $jobs = Job::with(['customer', 'photos', 'trades'])
+            ->when($request->customer_id, function ($q) use ($request) {
+                $q->where('customer_id', $request->customer_id);
+            })
+            ->latest()
+            ->paginate(15)
+            ->withQueryString(); // keep ?customer_id=value on pagination
+
+        return view('jobs.index', compact('customers', 'jobs'));
     }
 
     public function create()
     {
         $customers = Customer::orderBy('name')->get();
         $trades = Trade::orderBy('name')->get();
+
         return view('jobs.create', compact('customers', 'trades'));
     }
 
     public function store(StoreJobRequest $request)
     {
-        //dd($request);
+        // dd($request);
         DB::beginTransaction();
 
         try {
             $job = Job::create([
                 'customer_id' => $request->customer_id,
-                'title'       => $request->title,
+                'title' => $request->title,
                 'description' => $request->description,
             ]);
 
@@ -49,31 +72,32 @@ class JobController extends Controller
                     $path = $file->store('jobs/'.$job->id, 'public');
 
                     $job->photos()->create([
-                        'path'     => $path,
+                        'path' => $path,
                         'filename' => $file->getClientOriginalName(),
-                        'mime'     => $file->getClientMimeType(),
-                        'size'     => $file->getSize(),
+                        'mime' => $file->getClientMimeType(),
+                        'size' => $file->getSize(),
                     ]);
                 }
             }
 
             DB::commit();
-            return redirect()->route('jobs.show', $job)
-                            ->with('success', 'Job created.');
-        }
 
-        catch (\Throwable $e) {
+            return redirect()->route('jobs.show', $job)
+                ->with('success', 'Job created.');
+        } catch (\Throwable $e) {
             DB::rollBack();
+
             return back()->withInput()->withErrors([
-                'error' => 'Failed to create job: '.$e->getMessage()
+                'error' => 'Failed to create job: '.$e->getMessage(),
             ]);
         }
     }
 
     public function show(Job $job)
     {
-        //dd('index jobs');
-        $job->load(['customer','photos', 'trades']);
+        // dd('index jobs');
+        //$job->load(['customer', 'photos', 'trades']);
+
         return view('jobs.show', compact('job'));
     }
 
@@ -81,6 +105,7 @@ class JobController extends Controller
     {
         $customers = Customer::orderBy('name')->get();
         $trades = Trade::orderBy('name')->get();
+
         return view('jobs.edit', compact('job', 'customers', 'trades'));
     }
 
@@ -118,9 +143,11 @@ class JobController extends Controller
             }
 
             DB::commit();
-            return redirect()->route('jobs.index', $job)->with('success','Job updated.');
+
+            return redirect()->route('jobs.index', $job)->with('success', 'Job updated.');
         } catch (\Throwable $e) {
             DB::rollBack();
+
             return back()->withInput()->withErrors(['error' => 'Failed to update job: '.$e->getMessage()]);
         }
     }
@@ -133,17 +160,18 @@ class JobController extends Controller
             Storage::disk('public')->delete($photo->path);
         }
         $job->delete();
-        return redirect()->route('jobs.index')->with('success','Job deleted.');
+
+        return redirect()->route('jobs.index')->with('success', 'Job deleted.');
     }
 
     // Optional: method to delete a single photo
-    public function deletePhoto(Job $job, JobPhoto $photo)
-    {
-        if ($photo->job_id !== $job->id) {
-            abort(404);
-        }
-        Storage::disk('public')->delete($photo->path);
-        $photo->delete();
-        return back()->with('success','Photo removed.');
-    }
+    // public function deletePhoto(Job $job, JobPhoto $photo)
+    // {
+    //     if ($photo->job_id !== $job->id) {
+    //         abort(404);
+    //     }
+    //     Storage::disk('public')->delete($photo->path);
+    //     $photo->delete();
+    //     return back()->with('success','Photo removed.');
+    // }
 }

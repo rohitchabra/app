@@ -30,8 +30,12 @@
                             data-bs-target="#deleteCustomerModal{{ $customer->id }}">
                             Delete
                         </button>
-                        <button type="button" class="btn btn-primary"
-                         onclick="openJobsModal({{ $customer->id }})">View Jobs</button>
+                        <button type="button" class="btn btn-primary" onclick="viewJobs({{ $customer->id }})">
+                            View Jobs ({{ $customer->jobs_count }})
+                        </button>
+                        
+                        {{-- <button type="button" class="btn btn-primary"
+                         onclick="openJobsModal({{ $customer->id }})">View Jobs</button> --}}
                     </td>
                 </tr>
 
@@ -59,6 +63,12 @@
 </x-layout>
 
 <script>
+    function viewJobs(customerId) {
+        window.location.href = `/jobs?customer_id=${customerId}`;
+    }
+</script>
+
+<script>
     async function openJobsModal(customerId) {
     console.log('Opening jobs modal for customer:', customerId);
 
@@ -81,28 +91,6 @@
 }
 
 </script>
-    async function openJobsModal2(customerId) {
-        const modalBody = document.getElementById('jobsModalBody');
-    
-        modalBody.innerHTML = '<div class="text-center text-muted">Loading...</div>';
-    
-        const jobsModalEl = document.getElementById('jobsModal');
-        const jobsModal = new bootstrap.Modal(jobsModalEl); // FIXED
-        jobsModal.show();
-        console.log('Opening jobs modal for customer:', customerId);
-
-        $.ajax({
-            url: '/customers/' + customerId + '/jobs',
-            type: 'GET',
-            success: function(response) {
-                //$('#jobsModalBody').html(response);
-                modalBody.innerHTML = response;
-            }
-        });
-        $('#jobsModal').modal('show');
-        
-    }
-    </script>
     
 
 
