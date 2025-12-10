@@ -54,11 +54,5 @@ class CustomerController extends Controller
         Customer::findOrFail($id)->delete();
         return back()->with('success', 'Customer deleted!');
     }
-
-    public function jobs(Customer $customer)
-    {
-        $customer->load(['jobs.trades', 'jobs.photos']);
-        return view('customers.modals.partials.jobs-list', compact('customer'));
-    }
 }
 

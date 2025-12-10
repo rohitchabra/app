@@ -18,8 +18,10 @@ class StoreJobRequest extends FormRequest
             'title'       => 'required|string|max:50',
             'description' => 'nullable|string',
             'photos.*'    => 'nullable|image|max:5120',
-            'trade_ids' => 'required|array',
-            'trade_ids.*' => 'exists:trades,id',
+            // 'trade_ids' => 'required|array',
+            // 'trade_ids.*' => 'exists:trades,id',
+            // 'title' => 'required',
+            // 'trade_ids' => 'required|array'
         ];
     }
 

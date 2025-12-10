@@ -42,7 +42,7 @@
             <tr class="bg-gray-100 border-b">
                 <th class="py-2 px-4 text-left">Job Title</th>
                 <th class="py-2 px-4 text-left">Customer</th>
-                <th class="py-2 px-4 text-left">Photos</th>
+                {{-- <th class="py-2 px-4 text-left">Photos</th> --}}
                 <th class="py-2 px-4 text-left">Trades</th>
                 <th class="py-2 px-4 text-left">Actions</th>
             </tr>
@@ -58,7 +58,7 @@
                     <td class="py-2 px-4">{{ $job->customer->name }}</td>
 
                     <!-- Photos Preview -->
-                    <td class="py-2 px-4">
+                    {{-- <td class="py-2 px-4">
                         <div class="flex space-x-2">
                             @foreach($job->photos->take(3) as $photo)
                                 <img 
@@ -73,7 +73,7 @@
                                 </span>
                             @endif
                         </div>
-                    </td>
+                    </td> --}}
 
                     <td class="py-2 px-4">
                         @foreach($job->trades as $trade)
@@ -85,16 +85,23 @@
 
                     <!-- Actions -->
                     <td class="py-2 px-4">
-                        <a href="{{ route('jobs.show', $job->id) }}" 
+                        {{-- <a href="{{ route('jobs.show', $job->id) }}" 
                            class="bg-blue-600 text-white px-3 py-1 rounded mr-2">
                             View
-                        </a>
+                        </a> --}}
 
                         <a href="{{ route('jobs.edit', $job->id) }}" 
                            class="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
                             Edit
                         </a>
 
+                         <button 
+                            class="bg-green-600 text-white px-3 py-1 rounded mr-2 view-photo-btn"
+                            data-id="{{ $job->id }}"
+                        >
+                            Photo ({{ $job->photos_count }})
+                        </button>
+                        
                         <form action="{{ route('jobs.destroy', $job->id) }}" 
                               method="POST"
                               class="inline-block"
@@ -111,6 +118,33 @@
             @endforeach
         </tbody>
     </table>
+
+    {{-- @include('jobs.modals.jobs') --}}
+    @include('jobs.modals.photo')
+
 </x-layout>
 
+<!-- Your modal HTML here -->
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelectorAll('.view-photo-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                let jobId = this.getAttribute('data-id');
 
+                fetch(`/jobs/${jobId}/photo`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('JModalBody').innerHTML = html;
+                        //console.log(html);
+                        let modalEl = document.getElementById('photoModal');
+                        let modal = new bootstrap.Modal(modalEl);
+                        modal.show();
+                    });
+            });
+        });
+    });
+    </script>
+    
+    
+    
+    

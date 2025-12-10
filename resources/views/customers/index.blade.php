@@ -53,8 +53,6 @@
 
     @include('customers.modals.add_edit')
 
-    @include('customers.modals.jobs')
-
     {{-- @include('customers.modals.partials.jobs-list') --}}
 
     {{-- JS --}}

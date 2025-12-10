@@ -13,21 +13,13 @@ use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
-    public function index1()
-    {
-        $customers = Customer::orderBy('name')->get();
-            
-        $jobs = Job::with(['customer', 'photos', 'trades'])->latest()->paginate(15);
-
-        return view('jobs.index', compact('customers', 'jobs'));
-    }
-
     public function index(Request $request)
     {
         $customers = Customer::orderBy('name')->get();
 
         $selectedCustomer = null;
         if ($request->customer_id) {
+            //dd('11');
             $selectedCustomer = Customer::find($request->customer_id);
         }
 
@@ -37,14 +29,16 @@ class JobController extends Controller
                 $q->where('customer_id', $request->customer_id);
             })
             ->latest()
+            ->withCount('photos')
             ->paginate(15)
             ->withQueryString(); // keep ?customer_id=value on pagination
-
+            
         return view('jobs.index', compact('customers', 'jobs'));
     }
 
     public function create()
     {
+        //dd('11');
         $customers = Customer::orderBy('name')->get();
         $trades = Trade::orderBy('name')->get();
 
@@ -53,7 +47,7 @@ class JobController extends Controller
 
     public function store(StoreJobRequest $request)
     {
-        // dd($request);
+        //dd($request);
         DB::beginTransaction();
 
         try {
@@ -93,13 +87,12 @@ class JobController extends Controller
         }
     }
 
-    public function show(Job $job)
+    public function photo(Job $job)
     {
-        // dd('index jobs');
-        //$job->load(['customer', 'photos', 'trades']);
-
+        $job->load(['customer', 'photos', 'trades']);
         return view('jobs.show', compact('job'));
     }
+
 
     public function edit(Job $job)
     {
@@ -111,6 +104,7 @@ class JobController extends Controller
 
     public function update(Request $request, Job $job)
     {
+        //dd('index jobs');
         $validated = $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'title' => 'required|string|max:255',
@@ -163,15 +157,4 @@ class JobController extends Controller
 
         return redirect()->route('jobs.index')->with('success', 'Job deleted.');
     }
-
-    // Optional: method to delete a single photo
-    // public function deletePhoto(Job $job, JobPhoto $photo)
-    // {
-    //     if ($photo->job_id !== $job->id) {
-    //         abort(404);
-    //     }
-    //     Storage::disk('public')->delete($photo->path);
-    //     $photo->delete();
-    //     return back()->with('success','Photo removed.');
-    // }
 }

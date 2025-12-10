@@ -77,11 +77,6 @@ Route::middleware('auth')->group(function () {
     // Job list
     Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
 
-    // Search page
-    //Route::get('/job', [JobController::class, 'search'])->name('jobs.search');
-
-    Route::get('/jobs/{job}', [JobController::class, 'show']);
-
     // Create job form
     Route::get('/jobs/create', [JobController::class, 'create'])->name('jobs.create');
 
@@ -89,7 +84,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
 
     // Show job
-    Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
+    //Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
 
     // Edit job
     Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->name('jobs.edit');
@@ -98,5 +93,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/jobs/{job}', [JobController::class, 'update'])->name('jobs.update');
 
     // Delete job
-    Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
+    Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy'); 
+
+    Route::get('/jobs/{job}/photo', [JobController::class, 'photo'])->name('photo');   
 });

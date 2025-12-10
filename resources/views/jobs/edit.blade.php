@@ -11,6 +11,10 @@
             <label class="block font-semibold">Job Title</label>
             <input type="text" name="title" value="{{ $job->title }}"
                    class="border p-2 w-full rounded">
+
+               @error('title')
+                   <p id="title_error" class="text-red-600 text-sm error-text">{{ $message }}</p>
+               @enderror 
         </div>
 
         <div class="mb-4">
@@ -23,6 +27,9 @@
                     </option>
                 @endforeach
             </select>
+            @error('customer_id')
+                <p class="text-red-600 text-sm">{{ $message }}</p>
+            @enderror
         </div>
         <div class="mb-4">
             {{-- <label class="block mb-2 font-medium">Select Trades</label>

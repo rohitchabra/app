@@ -1,59 +1,17 @@
-<x-layout>
-    <x-slot:heading>
-        
-    </x-slot:heading>
+<div>
+    <h3 class="text-lg font-bold mb-3">Job #{{ $job->id }} Photos</h3>
 
-    <div class="space-y-4">
-
-        <!-- Job Title -->
-        <h2 class="text-xl font-bold">{{ $job->title }}</h2>
-
-        <!-- Job Description -->
-        <p class="text-gray-700">
-            {{ $job->description }}
-        </p>
-
-        <div class="mt-4">
-            {{-- <h3 class="font-semibold text-lg">Trades</h3> --}}
-
-            @if ($job->trades->isEmpty())
-                <p class="text-gray-500">No trades assigned to this job.</p>
-            @else
-                <div class="flex flex-wrap gap-2 mt-2">
-                    @foreach ($job->trades as $trade)
-                        <span class="bg-blue-600 text-white px-3 py-1 rounded-full text-sm">
-                            {{ $trade->name }}
-                        </span>
-                    @endforeach
-                </div>
-            @endif
-        </div>
-
-        <!-- Photos -->
-        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-4">
+    @if($job->photos && $job->photos->count())
+        <div class="grid grid-cols-3 gap-4">
             @foreach ($job->photos as $photo)
-                <div class="border rounded p-2">
-                    <img 
-                        src="{{ asset('storage/' . $photo->path) }}" 
-                        alt="Job Photo"
-                        class="w-full h-40 object-cover rounded"
-                    >
-                </div>
+                <img src="{{ asset('storage/' . $photo->path) }}" class="w-full rounded shadow">
             @endforeach
         </div>
+    @else
+        <p>No photos available.</p>
+    @endif
+</div>
 
-        @if ($job->photos->isEmpty())
-            <p class="text-gray-500">No photos uploaded for this job.</p>
-        @endif
-
-        <!-- Back Button -->
-        <a 
-            href="{{ route('jobs.index') }}" 
-            class="inline-block mt-4 bg-gray-600 text-white px-4 py-2 rounded"
-        >
-            Back to Jobs
-        </a>
-
-    </div>
-
-</x-layout>
+  
+    
+    
