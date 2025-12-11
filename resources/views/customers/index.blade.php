@@ -1,8 +1,31 @@
 <x-layout>
     <x-slot:heading>Customers</x-slot:heading>
 
-<button type="button" class="btn btn-success" 
-        onclick="openCustomerModal('add')">Add New Customer</button>
+    <form action="{{ route('customers.index') }}" method="GET">
+        <div class="container text-center">
+            <div class="row">   
+            <div class="col-3">
+                <input type="text" name="title" value="{{ request('title') }}"
+                    class="w-full border p-2 rounded" placeholder="Search Name, Email, Phone...">
+            </div>
+            <div class="col-6">
+                <button class="bg-green-600 text-white px-4 py-2 rounded mt-2">
+                    Search
+                </button>
+                <a href="{{ route('customers.index') }}" 
+                    class="bg-green-600 text-white px-4 py-2 rounded mt-2 inline-block">
+                        Clear
+                </a>
+            </div>
+            <div class="col-3">
+                <button type="button" class="btn btn-success mt-2" 
+                    onclick="openCustomerModal('add')">Add Customer</button>
+            </div>
+            
+            </div>
+        </div>
+    </form>
+
 
     <div class="mt-6">
         <table class="w-full border">
