@@ -22,9 +22,17 @@
                     <button type="button" class="btn btn-success mt-2" 
                         onclick="openCustomerModal('add')">Add Customer</button>
                 @endauth
-                <form action="{{ route('customers.export') }}" method="GET">
+                {{-- <form action="{{ route('customers.export') }}" method="GET">
                     <button type="submit" class="btn btn-success mt-2">Export</button>
-                </form>
+                </form> --}}
+                <a href="{{ route('customers.export') }}" class="btn btn-success mt-2">
+                    Export Excel
+                </a>
+                
+                <a href="{{ route('customers.export.pdf') }}" class="btn btn-danger mt-2">
+                    Export PDF
+                </a>
+                
             </div>
             
             </div>

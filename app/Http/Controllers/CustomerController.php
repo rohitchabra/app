@@ -7,9 +7,31 @@ use App\Http\Requests\CustomerStoreRequest;
 use Illuminate\Http\Request;
 use App\Exports\CustomersExport;
 use Maatwebsite\Excel\Facades\Excel;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 class CustomerController extends Controller
 {
+
+    public function export()
+    {
+        return Excel::download(
+            new CustomersExport,
+            'customers.xlsx'
+        );
+    }
+
+    public function exportPdf()
+    {
+        $customers = Customer::select('name', 'email', 'phone')
+            ->orderBy('name')
+            ->get();
+
+        $pdf = Pdf::loadView('customers.pdf', compact('customers'));
+
+        return $pdf->download('customers.pdf');
+    }
+
     public function index(Request $request)
     {
         $query = Customer::withCount('jobs')->orderBy('name');
@@ -67,11 +89,6 @@ class CustomerController extends Controller
     {
         Customer::findOrFail($id)->delete();
         return back()->with('success', 'Customer deleted!');
-    }
-
-    public function export()
-    {
-        //return Excel::download(new CustomersExport, 'customers.xlsx');
     }
 }
 

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredController;
-use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\LoginController;
@@ -13,7 +12,7 @@ use App\Models\Job;
 use Illuminate\Support\Facades\Route;
 
 Route::resource('users', UserController::class);
-Route::resource('customers', CustomerController::class);
+Route::resource('customers', 'App\Http\Controllers\CustomerController');
 Route::resource('jobs', JobController::class);
 Route::resource('trades', TradeController::class);
 Route::resource('roles', RoleController::class);
@@ -40,12 +39,12 @@ Route::get('/contact', function () {
 Route::middleware('auth', 'role:admin')->group(function () {});
 
 Route::middleware('auth')->group(function () {
-    Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
-    Route::get('/customers/create', [CustomerController::class, 'create'])->name('customers.create');
-    Route::post('/customers', [CustomerController::class, 'store'])->name('customers.store');
-    Route::get('/customers/{customer}', [CustomerController::class, 'show'])->name('customers.show');
-    Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
-    Route::get('/customers/{customer}/jobs', [CustomerController::class, 'jobs'])->name('customers.jobs');
+    Route::get('/customers', 'App\Http\Controllers\CustomerController@index')->name('customers.index');
+    Route::get('/customers/create', 'App\Http\Controllers\CustomerController@create')->name('customers.create');
+    Route::post('/customers', 'App\Http\Controllers\CustomerController@store')->name('customers.store');
+    Route::get('/customers/{customer}', 'App\Http\Controllers\CustomerController@show')->name('customers.show');
+    Route::put('/customers/{customer}', 'App\Http\Controllers\CustomerController@update')->name('customers.update');
+    Route::get('/customers/{customer}/jobs', 'App\Http\Controllers\CustomerController@jobs')->name('customers.jobs');
 
     Route::get('/trades', [TradeController::class, 'index'])->name('trades.index');
     Route::get('/trades/create', [TradeController::class, 'create'])->name('trades.create');
@@ -91,7 +90,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
     Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
 
-    Route::get('/customers/export', [CustomerController::class, 'export'])
+    Route::get('/customers/export', 'App\Http\Controllers\CustomerController@export')
     ->name('customers.export');
+
+    Route::get('/customers/export/pdf', 'App\Http\Controllers\CustomerController@exportPdf')
+    ->name('customers.export.pdf');
+
 
 });
