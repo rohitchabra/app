@@ -76,7 +76,7 @@ class JobController extends Controller
 
             DB::commit();
 
-            return redirect()->route('jobs.show', $job)
+            return redirect()->route('jobs.index', $job)
                 ->with('success', 'Job created.');
         } catch (\Throwable $e) {
             DB::rollBack();

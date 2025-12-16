@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\Auth\RegisteredUserController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Arr;
-use App\Models\Job;
-use Illuminate\Contracts\Session\Session;
-use App\Http\Controllers\LoginController;
 use App\Http\Controllers\Auth\RegisteredController;
 use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\JobController;
-use App\Http\Controllers\TradeController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\JobController;
+use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\TradeController;
+use App\Http\Controllers\UserController;
+use App\Models\Job;
+use Illuminate\Support\Facades\Route;
 
+Route::resource('users', UserController::class);
 Route::resource('customers', CustomerController::class);
 Route::resource('jobs', JobController::class);
 Route::resource('trades', TradeController::class);
+Route::resource('roles', RoleController::class);
+Route::resource('permissions', PermissionController::class);
 
 Route::get('/', function () {
     return view('home');
@@ -28,20 +31,13 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
 Route::get('/register', [RegisteredController::class, 'show'])->name('register');
 Route::post('/register', [RegisteredController::class, 'store']);
 
-// Protected Dashboard
-// Route::get('/dashboard', function () {
-//     return view('dashboard.index');
-// })->middleware('auth')->name('dashboard');
-
-// Route::get('/dashboard', [DashboardController::class, 'index'])
-//     ->middleware('auth')
-//     ->name('dashboard');
-
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 Route::get('/contact', function () {
     return view('contact');
 });
+
+Route::middleware('auth', 'role:admin')->group(function () {});
 
 Route::middleware('auth')->group(function () {
     Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
@@ -51,13 +47,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/customers/{customer}', [CustomerController::class, 'update'])->name('customers.update');
     Route::get('/customers/{customer}/jobs', [CustomerController::class, 'jobs'])->name('customers.jobs');
 
-    // Route::get('/create', [JobController::class, 'create'])->middleware('auth')->name('jobs.create');
-    // Route::post('/jobs', [JobController::class, 'store'])->middleware('auth')->name('jobs.store');
-    // Route::get('/jobs', [JobController::class, 'index'])->middleware('auth')->name('jobs.index');
-    // Route::get('/jobs/search', [JobController::class, 'search'])->middleware('auth')->name('jobs.search');
-
-    //Route::get('/jobs', [JobController::class, 'jobs'])->middleware('auth')->name('jobs.jobs');
-
     Route::get('/trades', [TradeController::class, 'index'])->name('trades.index');
     Route::get('/trades/create', [TradeController::class, 'create'])->name('trades.create');
     Route::post('/trades', [TradeController::class, 'store'])->name('trades.store');
@@ -65,14 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::put('/trades/{trade}', [TradeController::class, 'update'])->name('trades.update');
     Route::delete('/trades/{trade}', [TradeController::class, 'destroy'])->name('trades.destroy');
 
-    // Route::get('/trades', [TradeController::class, 'index'])->middleware('auth')->name('trades.index');
-    // Route::post('/trades', [TradeController::class, 'create'])->middleware('auth')->name('trades.create');
-    // Route::post('/trades', [TradeController::class, 'edit'])->middleware('auth')->name('trades.edit');
-
     Route::delete('jobs/{job}/photos/{photo}', [JobController::class, 'deletePhoto'])->middleware('auth')->name('jobs.photos.destroy');
-});
-
-Route::middleware('auth')->group(function () {
 
     // Job list
     Route::get('/jobs', [JobController::class, 'index'])->name('jobs.index');
@@ -84,7 +66,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/jobs', [JobController::class, 'store'])->name('jobs.store');
 
     // Show job
-    //Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
+    // Route::get('/jobs/{job}', [JobController::class, 'show'])->name('jobs.show');
 
     // Edit job
     Route::get('/jobs/{job}/edit', [JobController::class, 'edit'])->name('jobs.edit');
@@ -93,7 +75,23 @@ Route::middleware('auth')->group(function () {
     Route::put('/jobs/{job}', [JobController::class, 'update'])->name('jobs.update');
 
     // Delete job
-    Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy'); 
+    Route::delete('/jobs/{job}', [JobController::class, 'destroy'])->name('jobs.destroy');
 
-    Route::get('/jobs/{job}/photo', [JobController::class, 'photo'])->name('photo');   
+    Route::get('/jobs/{job}/photo', [JobController::class, 'photo'])->name('photo');
+
+    // Route::get('/roles', [RoleController::class, 'roles'])->name('roles');
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+
+
+    Route::get('/users', [UserController::class, 'index'])->name('users.index');
+    Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
+    Route::post('/users', [UserController::class, 'store'])->name('users.store');
+
+    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
+    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+
+    Route::get('/customers/export', [CustomerController::class, 'export'])
+    ->name('customers.export');
+
 });

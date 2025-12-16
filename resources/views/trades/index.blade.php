@@ -14,10 +14,12 @@
         </p>
     @endif
 
-    <a href="{{ route('trades.create') }}"
-       class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
-        + Add Trade
-    </a>
+     @if(auth()->user()->hasRole(['admin']))
+        <a href="{{ route('trades.create') }}"
+        class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
+            + Add Trade
+        </a>
+    @endauth
 
     {{-- @if (session('success'))
         <p class="text-green-600 mb-4">{{ session('success') }}</p>
@@ -44,7 +46,8 @@
                     <td class="border px-4 py-2">{{ $trade->trade_id }}</td>
                     <td class="border px-4 py-2">
                         {{-- || auth()->id() == 3 --}}
-                        @if($trade->trade_id == 'custom')
+                        @if(auth()->user()->hasRole(['admin']))
+                        {{-- @if($trade->trade_id == 'custom') --}}
                             <a href="{{ route('trades.edit', $trade->id) }}"
                             class="text-blue-600 mr-2">Edit</a>
 

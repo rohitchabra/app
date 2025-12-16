@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Customer;
 use App\Http\Requests\CustomerStoreRequest;
 use Illuminate\Http\Request;
+use App\Exports\CustomersExport;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
@@ -25,13 +27,6 @@ class CustomerController extends Controller
 
         $customers = $query->paginate(10);
 
-        return view('customers.index', compact('customers'));
-    }
-
-    public function index1()
-    {
-        $customers = Customer::withCount('jobs')->orderBy('name')->paginate(10);
-        
         return view('customers.index', compact('customers'));
     }
 
@@ -72,6 +67,11 @@ class CustomerController extends Controller
     {
         Customer::findOrFail($id)->delete();
         return back()->with('success', 'Customer deleted!');
+    }
+
+    public function export()
+    {
+        //return Excel::download(new CustomersExport, 'customers.xlsx');
     }
 }
 

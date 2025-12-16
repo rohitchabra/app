@@ -25,15 +25,27 @@
           </div>
           <div class="hidden md:block">
             <div class="ml-10 flex items-baseline space-x-4">
-              <x-nav-link href="/" :active="request() -> is('/')">Home</x-nav-link>
+              {{-- <x-nav-link href="/" :active="request() -> is('/')">Home</x-nav-link> --}}
               @auth
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-white/5 hover:text-white" -->
-                <x-nav-link href="/dashboard" :active="request() -> is('dashboard')">Dashboard</x-nav-link>
-                <x-nav-link href="/customers" :active="request() -> is('customers')">Customers</x-nav-link>
-                <x-nav-link href="/trades" :active="request() -> is('trades')">Trades</x-nav-link>
-                <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
-                {{-- <x-nav-link href="/contact" :active="request() -> is('contact')">Contact</x-nav-link> --}}
+                  {{-- Admin & User --}}
+                  @role('admin|user')
+                      {{-- <x-nav-link href="/users" :active="request()->is('users')">Users</x-nav-link> --}}
+                  @endrole
+
+                  {{-- Admin only --}}
+                  @role('admin')
+                      <x-nav-link href="/users" :active="request()->is('users')">Users</x-nav-link>
+                      <x-nav-link href="/roles" :active="request()->is('roles')">Roles</x-nav-link>
+                      <x-nav-link href="/permissions" :active="request()->is('permissions')">Permissions</x-nav-link>
+                      <x-nav-link href="/dashboard" :active="request()->is('dashboard')">Dashboard</x-nav-link>
+                      <x-nav-link href="/trades" :active="request()->is('trades')">Trades</x-nav-link>
+                      <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
+                  @endrole
+
+                  {{-- Everyone logged in --}}
+                  <x-nav-link href="/customers" :active="request()->is('customers')">Customers</x-nav-link>
               @endauth
+
             </div>
           </div>
         </div>
@@ -44,6 +56,11 @@
               <x-nav-link href="/register" :active="request()->is('register')">Register</x-nav-linka>   
             @endguest 
             @auth
+            {{-- <p>Welcome back, {{ auth()->user()->name }}!</p>
+    <a href="/dashboard">Dashboard</a> --}}
+              <x-nav-link href="#">
+                  {{ auth()->user()->name }}
+              </x-nav-link>
               <form method="POST" action="/logout">
                 <x-nav-link href="/logout">Log Out</x-nav-link>
               </form>
@@ -104,7 +121,9 @@
 
   <header class="relative bg-white shadow-sm">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900">{{ $heading }}</h1>
+      <h1 class="text-3xl font-bold tracking-tight text-gray-900">
+        {{-- {{ $heading }} --}}
+      </h1>
     </div>
   </header>
   <main>

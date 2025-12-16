@@ -18,8 +18,13 @@
                 </a>
             </div>
             <div class="col-3">
-                <button type="button" class="btn btn-success mt-2" 
-                    onclick="openCustomerModal('add')">Add Customer</button>
+                @if(auth()->user()->hasRole(['admin']))
+                    <button type="button" class="btn btn-success mt-2" 
+                        onclick="openCustomerModal('add')">Add Customer</button>
+                @endauth
+                <form action="{{ route('customers.export') }}" method="GET">
+                    <button type="submit" class="btn btn-success mt-2">Export</button>
+                </form>
             </div>
             
             </div>
@@ -45,20 +50,22 @@
                     <td class="p-2 border">{{ $customer->email }}</td>
                     <td class="p-2 border">{{ $customer->phone }}</td>
                     <td class="p-2 border space-x-2">
-                        <button type="button" class="btn btn-primary" 
-                        onclick="openCustomerModal('edit', {{ $customer->id }})">Edit</button>
-                        <button 
-                            class="bg-red-600 text-white px-2 py-1 rounded"
-                            data-bs-toggle="modal"
-                            data-bs-target="#deleteCustomerModal{{ $customer->id }}">
-                            Delete
-                        </button>
-                        <button type="button" class="btn btn-primary" onclick="viewJobs({{ $customer->id }})">
-                            View Jobs ({{ $customer->jobs_count }})
-                        </button>
-                        
-                        {{-- <button type="button" class="btn btn-primary"
-                         onclick="openJobsModal({{ $customer->id }})">View Jobs</button> --}}
+                        @if(auth()->user()->hasRole(['admin']))
+                            <button type="button" class="btn btn-primary" 
+                            onclick="openCustomerModal('edit', {{ $customer->id }})">Edit</button>
+                            <button 
+                                class="bg-red-600 text-white px-2 py-1 rounded"
+                                data-bs-toggle="modal"
+                                data-bs-target="#deleteCustomerModal{{ $customer->id }}">
+                                Delete
+                            </button>
+                            <button type="button" class="btn btn-primary" onclick="viewJobs({{ $customer->id }})">
+                                View Jobs ({{ $customer->jobs_count }})
+                            </button>
+                            
+                            {{-- <button type="button" class="btn btn-primary"
+                            onclick="openJobsModal({{ $customer->id }})">View Jobs</button> --}}
+                         @endif
                     </td>
                 </tr>
 
