@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Customer;
-use App\Http\Requests\CustomerStoreRequest;
-use Illuminate\Http\Request;
 use App\Exports\CustomersExport;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\CustomerStoreRequest;
+use App\Models\Customer;
 use Barryvdh\DomPDF\Facade\Pdf;
-
+use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CustomerController extends Controller
 {
-
-    public function export()
+    public function show()
     {
         return Excel::download(
             new CustomersExport,
@@ -23,9 +21,7 @@ class CustomerController extends Controller
 
     public function exportPdf()
     {
-        $customers = Customer::select('name', 'email', 'phone')
-            ->orderBy('name')
-            ->get();
+        $customers = Customer::orderBy('name')->get();
 
         $pdf = Pdf::loadView('customers.pdf', compact('customers'));
 
@@ -39,11 +35,11 @@ class CustomerController extends Controller
         if ($request->title) {
 
             $search = $request->title;
-    
+
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('phone', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%")
+                    ->orWhere('phone', 'like', "%{$search}%");
             });
         }
 
@@ -88,7 +84,7 @@ class CustomerController extends Controller
     public function destroy($id)
     {
         Customer::findOrFail($id)->delete();
+
         return back()->with('success', 'Customer deleted!');
     }
 }
-

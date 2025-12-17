@@ -4,37 +4,33 @@
     <form action="{{ route('customers.index') }}" method="GET">
         <div class="container text-center">
             <div class="row">   
-            <div class="col-3">
-                <input type="text" name="title" value="{{ request('title') }}"
-                    class="w-full border p-2 rounded" placeholder="Search Name, Email, Phone...">
-            </div>
-            <div class="col-6">
-                <button class="bg-green-600 text-white px-4 py-2 rounded mt-2">
-                    Search
-                </button>
-                <a href="{{ route('customers.index') }}" 
-                    class="bg-green-600 text-white px-4 py-2 rounded mt-2 inline-block">
-                        Clear
-                </a>
-            </div>
-            <div class="col-3">
-                @if(auth()->user()->hasRole(['admin']))
-                    <button type="button" class="btn btn-success mt-2" 
-                        onclick="openCustomerModal('add')">Add Customer</button>
-                @endauth
-                {{-- <form action="{{ route('customers.export') }}" method="GET">
-                    <button type="submit" class="btn btn-success mt-2">Export</button>
-                </form> --}}
-                <a href="{{ route('customers.export') }}" class="btn btn-success mt-2">
-                    Export Excel
-                </a>
-                
-                <a href="{{ route('customers.export.pdf') }}" class="btn btn-danger mt-2">
-                    Export PDF
-                </a>
-                
-            </div>
-            
+                <div class="col-3">
+                    <input type="text" name="title" value="{{ request('title') }}"
+                        class="w-full border p-2 rounded" placeholder="Search Name, Email, Phone...">
+                </div>
+                <div class="col-4">
+                    <button class="bg-green-600 text-white px-4 py-2 rounded mt-2">
+                        Search
+                    </button>
+                    <a href="{{ route('customers.index') }}" 
+                        class="bg-green-600 text-white px-4 py-2 rounded mt-2 inline-block">
+                            Clear
+                    </a>
+                </div>
+                <div class="col-5">
+                    @if(auth()->user()->hasRole(['admin']))
+                        <button type="button" class="btn btn-success mt-2" 
+                            onclick="openCustomerModal('add')">Add Customer</button>
+                    @endauth
+                    <a href="{{ route('customers.export') }}" class="btn btn-success mt-2">
+                        Excel
+                    </a>
+                    
+                    <a href="{{ route('customers.export.pdf') }}" class="btn btn-danger mt-2">
+                        PDF
+                    </a>
+                    
+                </div>
             </div>
         </div>
     </form>
