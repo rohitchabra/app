@@ -32,6 +32,8 @@ class RolesPermissionSeeder extends Seeder
         $permissions = [
             'view users',
             'edit users',
+            'create users',
+            'delete users',
             
             'create roles',
             'view roles',
@@ -61,6 +63,11 @@ class RolesPermissionSeeder extends Seeder
             'view dashboard',
         ];
 
+        // 2️⃣ Define permissions
+        $user_permissions = [
+            'view dashboard',
+        ];
+
         // 3️⃣ Create permissions
         foreach ($permissions as $permissionName) {
             Permission::firstOrCreate([
@@ -71,6 +78,22 @@ class RolesPermissionSeeder extends Seeder
 
         // 4️⃣ Assign ALL permissions to admin role
         $adminRole->syncPermissions($permissions);
+        $userRole->syncPermissions($user_permissions);
+
+        // 5️⃣ Create super admin user
+        $superadmin = User::firstOrCreate(
+            ['email' => 'superadmin@gmail.com'],
+            [
+                'name' => 'SuperAdmin',
+                'password' => Hash::make('12345678'),
+                'email_verified_at' => now(),
+            ]
+        );
+
+        // 6️⃣ Assign user role to admin user
+        if (! $superadmin->hasRole('SuperAdmin')) {
+            $superadmin->assignRole('SuperAdmin');
+        }
 
         // 5️⃣ Create admin user
         $admin = User::firstOrCreate(
@@ -82,6 +105,11 @@ class RolesPermissionSeeder extends Seeder
             ]
         );
 
+        // 6️⃣ Assign admin role to admin user
+        if (! $admin->hasRole('admin')) {
+            $admin->assignRole('admin');
+        }
+
         // 5️⃣ Create admin user
         $user = User::firstOrCreate(
             ['email' => 'himanshu@gmail.com'],
@@ -91,11 +119,6 @@ class RolesPermissionSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-
-        // 6️⃣ Assign admin role to admin user
-        if (! $admin->hasRole('admin')) {
-            $admin->assignRole('admin');
-        }
 
         // 6️⃣ Assign user role to admin user
         if (! $user->hasRole('user')) {

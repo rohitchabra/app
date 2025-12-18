@@ -3,7 +3,7 @@
         Users
     </x-slot>
     {{-- @if(auth()->user()->hasRole(['admin'])) --}}
-    @can('view users')
+    @can('create users')
         <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">
             Create User
         </a>
@@ -33,11 +33,13 @@
                     </td>
                     <td>{{ $user->created_at->format('d M Y') }}</td>
                     <td class="p-3 flex gap-2">
-                        @can('view users')
+                        @can('edit users')
                             <a href="{{ route('users.edit', $user->id) }}"
                             class="btn btn-sm btn-warning">
                             Edit
                             </a>
+                        @endcan
+                        @can('delete users')
                             <form action="{{ route('users.destroy', $user->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')

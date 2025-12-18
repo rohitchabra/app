@@ -66,13 +66,13 @@ class TradeController extends Controller implements HasMiddleware
     public function destroy(Trade $trade)
     {
         $jobs = Job::whereHas('trades', function ($query) use ($trade) {
-            $query->where('trade_id', $trade->id);
+            $query->where('trades.id', $trade->id);
         })->get();
 
         if ($jobs->isNotEmpty()) {
             return redirect()->route('trades.index')->with('error', 'Cannot delete trade. It is associated with existing jobs.');
         }
-                                
+                              
         $trade->delete();
         return redirect()->route('trades.index')->with('success', 'Trade deleted successfully.');
     }

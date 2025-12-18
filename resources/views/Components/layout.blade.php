@@ -31,9 +31,6 @@
                   @role('admin|user')
                       {{-- <x-nav-link href="/users" :active="request()->is('users')">Users</x-nav-link> --}}
                   @endrole
-
-                  {{-- Admin only --}}
-                  {{-- @role('admin') --}}
                   @can('view users')
                       <x-nav-link href="/users" :active="request()->is('users')">Users</x-nav-link>
                   @endcan
@@ -49,14 +46,11 @@
                   @can('view trades')
                       <x-nav-link href="/trades" :active="request()->is('trades')">Trades</x-nav-link>
                   @endcan
-                  @can('view jobs')
-                      <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
-                  @endcan
-                  {{-- @endrole --}}
-                  
-                  {{-- Everyone logged in --}}
                   @can('view customers')
                     <x-nav-link href="/customers" :active="request()->is('customers')">Customers</x-nav-link>
+                  @endcan
+                  @can('view jobs')
+                      <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
                   @endcan
               @endauth
 

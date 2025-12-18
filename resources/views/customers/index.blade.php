@@ -18,10 +18,10 @@
                     </a>
                 </div>
                 <div class="col-5">
-                    {{-- @if(auth()->user()->hasRole(['admin'])) --}}
+                    @can('create customers')
                         <button type="button" class="btn btn-success mt-2" 
                             onclick="openCustomerModal('add')">Add Customer</button>
-                    {{-- @endauth --}}
+                    @endcan
                     <a href="{{ route('customers.export') }}" class="btn btn-success mt-2">
                         Excel
                     </a>
@@ -54,19 +54,23 @@
                     <td class="p-2 border">{{ $customer->email }}</td>
                     <td class="p-2 border">{{ $customer->phone }}</td>
                     <td class="p-2 border space-x-2">
-                        {{-- @if(auth()->user()->hasRole(['admin'])) --}}
+                        @can('edit customers')
                             <button type="button" class="btn btn-primary" 
                             onclick="openCustomerModal('edit', {{ $customer->id }})">Edit</button>
+                        @endcan
+                        @can('delete customers')
                             <button 
                                 class="bg-red-600 text-white px-2 py-1 rounded"
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteCustomerModal{{ $customer->id }}">
                                 Delete
                             </button>
+                        @endcan
+                        @can('edit customers')
                             <button type="button" class="btn btn-primary" onclick="viewJobs({{ $customer->id }})">
                                 View Jobs ({{ $customer->jobs_count }})
                             </button>
-                            
+                        @endcan    
                             {{-- <button type="button" class="btn btn-primary"
                             onclick="openJobsModal({{ $customer->id }})">View Jobs</button> --}}
                          {{-- @endif --}}

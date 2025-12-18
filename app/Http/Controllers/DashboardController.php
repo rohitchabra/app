@@ -24,15 +24,4 @@ class DashboardController extends Controller implements HasMiddleware
     {
         return view('dashboard.index');
     }
-
-    public function index1()
-    {
-        
-        $totalCustomers = Customer::count();
-        $totalJobs = Job::count();
-        $totalTrades = Trade::count();
-        //dd('here', Customer::count(), Job::count(), Trade::count());
-        return view('dashboard.index', [
-        ]);
-    }
 }

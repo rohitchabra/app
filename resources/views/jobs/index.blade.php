@@ -27,12 +27,19 @@
                     </a>
                 </div>
                 <div class="col-3">
-                    @can('view trades')
+                    @can('create jobs')
                         <a href="{{ route('jobs.create') }}" 
                             class="bg-green-600 text-white px-4 py-2 rounded inline-block mt-2">
                             Add Job
                         </a>
-                     @endcan
+                    @endcan
+                    {{-- <a href="{{ route('jobs.export') }}" class="btn btn-success mt-2">
+                        Excel
+                    </a>
+                    
+                    <a href="{{ route('jobs.export.pdf') }}" class="btn btn-danger mt-2">
+                        PDF
+                    </a> --}}
                 </div>
             </div>
         </div>
@@ -85,7 +92,7 @@
 
                     <!-- Actions -->
                     <td class="py-2 px-4">
-                        @can('view trades')
+                        @can('edit jobs')
                             {{-- <a href="{{ route('jobs.show', $job->id) }}" 
                             class="bg-blue-600 text-white px-3 py-1 rounded mr-2">
                                 View
@@ -95,14 +102,15 @@
                             class="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
                                 Edit
                             </a>
-
+                        @endcan
                             <button 
                                 class="bg-green-600 text-white px-3 py-1 rounded mr-2 view-photo-btn"
                                 data-id="{{ $job->id }}"
                             >
                                 Photo ({{ $job->photos_count }})
                             </button>
-                            
+                        
+                        @can('delete jobs')
                             <form action="{{ route('jobs.destroy', $job->id) }}" 
                                 method="POST"
                                 class="inline-block"

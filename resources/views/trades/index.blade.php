@@ -14,7 +14,7 @@
         </p>
     @endif
 
-    @can('view trades')
+    @can('create trades')
         <a href="{{ route('trades.create') }}"
         class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
             + Add Trade
@@ -33,7 +33,7 @@
             <tr class="bg-gray-100">
                 <th class="border px-4 py-2">ID</th>
                 <th class="border px-4 py-2">Name</th>
-                <th class="border px-4 py-2">Trades</th>
+                {{-- <th class="border px-4 py-2">Trades</th> --}}
                 <th class="border px-4 py-2">Actions</th>
             </tr>
         </thead>
@@ -43,12 +43,13 @@
                 <tr>
                     <td class="border px-4 py-2">{{ $trade->id }}</td>
                     <td class="border px-4 py-2">{{ $trade->name }}</td>
-                    <td class="border px-4 py-2">{{ $trade->trade_id }}</td>
+                    {{-- <td class="border px-4 py-2">{{ $trade->trade_id }}</td> --}}
                     <td class="border px-4 py-2">
-                        @can('view trades')
+                        @can('edit trades')
                             <a href="{{ route('trades.edit', $trade->id) }}"
                             class="text-blue-600 mr-2">Edit</a>
-
+                        @endcan
+                        @can('delete trades')
                             <form action="{{ route('trades.destroy', $trade->id) }}"
                                 method="POST" class="inline">
                                 @csrf
