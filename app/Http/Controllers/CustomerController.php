@@ -8,9 +8,22 @@ use App\Models\Customer;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware; 
 
-class CustomerController extends Controller
+class CustomerController extends Controller implements HasMiddleware
 {
+
+    public static function middleware(): array
+    {
+        return  [
+            new Middleware('permission:view customers', only: ['index']),
+            new Middleware('permission:edit customers', only: ['edit']),
+            new Middleware('permission:create customers', only: ['create']),
+            new Middleware('permission:delete customers', only: ['destroy'])
+        ];
+    }
+
     public function show()
     {
         return Excel::download(

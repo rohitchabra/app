@@ -13,27 +13,52 @@ class RolesPermissionSeeder extends Seeder
     public function run(): void
     {
         // 1️⃣ Create roles
+        $superadminRole = Role::firstOrCreate([
+            'name' => 'SuperAdmin',
+            'guard_name' => 'web',
+        ]);
+
         $adminRole = Role::firstOrCreate([
-            'name' => 'admin',
+            'name' => 'Admin',
             'guard_name' => 'web',
         ]);
 
         $userRole = Role::firstOrCreate([
-            'name' => 'user',
-            'guard_name' => 'web',
-        ]);
-
-        $editorRole = Role::firstOrCreate([
-            'name' => 'editor',
+            'name' => 'User',
             'guard_name' => 'web',
         ]);
 
         // 2️⃣ Define permissions
         $permissions = [
-            'manage users',
-            'manage roles',
-            'manage permissions',
-            'manage trades',
+            'view users',
+            'edit users',
+            
+            'create roles',
+            'view roles',
+            'edit roles',
+            'delete roles',
+
+            'create permissions',
+            'view permissions',
+            'edit permissions',
+            'delete permissions',
+
+            'create trades',
+            'view trades',
+            'edit trades',
+            'delete trades',
+
+            'create jobs',
+            'view jobs',
+            'edit jobs',
+            'delete jobs',
+
+            'create customers',
+            'view customers',
+            'edit customers',
+            'delete customers',
+
+            'view dashboard',
         ];
 
         // 3️⃣ Create permissions
@@ -57,9 +82,24 @@ class RolesPermissionSeeder extends Seeder
             ]
         );
 
+        // 5️⃣ Create admin user
+        $user = User::firstOrCreate(
+            ['email' => 'himanshu@gmail.com'],
+            [
+                'name' => 'Himanshu',
+                'password' => Hash::make('12345678'),
+                'email_verified_at' => now(),
+            ]
+        );
+
         // 6️⃣ Assign admin role to admin user
         if (! $admin->hasRole('admin')) {
             $admin->assignRole('admin');
+        }
+
+        // 6️⃣ Assign user role to admin user
+        if (! $user->hasRole('user')) {
+            $user->assignRole('user');
         }
     }
 }

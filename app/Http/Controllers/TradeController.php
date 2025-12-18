@@ -5,9 +5,21 @@ namespace App\Http\Controllers;
 use App\Models\Trade;
 use App\Models\Job;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware; 
 
-class TradeController extends Controller
+class TradeController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return  [
+            new Middleware('permission:view trades', only: ['index']),
+            new Middleware('permission:edit trades', only: ['edit']),
+            new Middleware('permission:create trades', only: ['create']),
+            new Middleware('permission:delete trades', only: ['destroy'])
+        ];
+    }
+
     public function index()
     {
         $trades = Trade::all();

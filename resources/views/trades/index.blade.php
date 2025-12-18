@@ -14,12 +14,12 @@
         </p>
     @endif
 
-     @if(auth()->user()->hasRole(['admin']))
+    @can('view trades')
         <a href="{{ route('trades.create') }}"
         class="bg-blue-600 text-white px-4 py-2 rounded mb-4 inline-block">
             + Add Trade
         </a>
-    @endauth
+    @endcan
 
     {{-- @if (session('success'))
         <p class="text-green-600 mb-4">{{ session('success') }}</p>
@@ -45,9 +45,7 @@
                     <td class="border px-4 py-2">{{ $trade->name }}</td>
                     <td class="border px-4 py-2">{{ $trade->trade_id }}</td>
                     <td class="border px-4 py-2">
-                        {{-- || auth()->id() == 3 --}}
-                        @if(auth()->user()->hasRole(['admin']))
-                        {{-- @if($trade->trade_id == 'custom') --}}
+                        @can('view trades')
                             <a href="{{ route('trades.edit', $trade->id) }}"
                             class="text-blue-600 mr-2">Edit</a>
 
@@ -60,7 +58,7 @@
                                     Delete
                                 </button>
                             </form>
-                        @endif
+                        @endcan
                     </td>
                 </tr>
             @endforeach

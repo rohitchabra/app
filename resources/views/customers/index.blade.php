@@ -18,10 +18,10 @@
                     </a>
                 </div>
                 <div class="col-5">
-                    @if(auth()->user()->hasRole(['admin']))
+                    {{-- @if(auth()->user()->hasRole(['admin'])) --}}
                         <button type="button" class="btn btn-success mt-2" 
                             onclick="openCustomerModal('add')">Add Customer</button>
-                    @endauth
+                    {{-- @endauth --}}
                     <a href="{{ route('customers.export') }}" class="btn btn-success mt-2">
                         Excel
                     </a>
@@ -54,7 +54,7 @@
                     <td class="p-2 border">{{ $customer->email }}</td>
                     <td class="p-2 border">{{ $customer->phone }}</td>
                     <td class="p-2 border space-x-2">
-                        @if(auth()->user()->hasRole(['admin']))
+                        {{-- @if(auth()->user()->hasRole(['admin'])) --}}
                             <button type="button" class="btn btn-primary" 
                             onclick="openCustomerModal('edit', {{ $customer->id }})">Edit</button>
                             <button 
@@ -69,7 +69,7 @@
                             
                             {{-- <button type="button" class="btn btn-primary"
                             onclick="openJobsModal({{ $customer->id }})">View Jobs</button> --}}
-                         @endif
+                         {{-- @endif --}}
                     </td>
                 </tr>
 

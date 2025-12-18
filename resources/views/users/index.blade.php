@@ -2,11 +2,13 @@
     <x-slot name="heading">
         Users
     </x-slot>
-    @if(auth()->user()->hasRole(['admin']))
+    {{-- @if(auth()->user()->hasRole(['admin'])) --}}
+    @can('view users')
         <a href="{{ route('users.create') }}" class="btn btn-primary mb-3">
             Create User
         </a>
-    @endauth
+    @endcan
+    {{-- @endauth --}}
 
     <table class="table table-bordered">
         <thead>
@@ -31,7 +33,7 @@
                     </td>
                     <td>{{ $user->created_at->format('d M Y') }}</td>
                     <td class="p-3 flex gap-2">
-                        @if(auth()->user()->hasRole(['admin']))
+                        @can('view users')
                             <a href="{{ route('users.edit', $user->id) }}"
                             class="btn btn-sm btn-warning">
                             Edit
@@ -43,7 +45,7 @@
                                     Delete
                                 </button>
                             </form>
-                        @endauth
+                        @endcan
                     </td>
                 </tr>
             @endforeach

@@ -33,17 +33,31 @@
                   @endrole
 
                   {{-- Admin only --}}
-                  @role('admin')
+                  {{-- @role('admin') --}}
+                  @can('view users')
                       <x-nav-link href="/users" :active="request()->is('users')">Users</x-nav-link>
+                  @endcan
+                  @can('view roles')
                       <x-nav-link href="/roles" :active="request()->is('roles')">Roles</x-nav-link>
+                  @endcan
+                  @can('view permissions')
                       <x-nav-link href="/permissions" :active="request()->is('permissions')">Permissions</x-nav-link>
+                  @endcan
+                  @can('view dashboard')
                       <x-nav-link href="/dashboard" :active="request()->is('dashboard')">Dashboard</x-nav-link>
+                  @endcan
+                  @can('view trades')
                       <x-nav-link href="/trades" :active="request()->is('trades')">Trades</x-nav-link>
+                  @endcan
+                  @can('view jobs')
                       <x-nav-link href="/jobs" :active="request()->is('job*')">Jobs</x-nav-link>
-                  @endrole
-
+                  @endcan
+                  {{-- @endrole --}}
+                  
                   {{-- Everyone logged in --}}
-                  <x-nav-link href="/customers" :active="request()->is('customers')">Customers</x-nav-link>
+                  @can('view customers')
+                    <x-nav-link href="/customers" :active="request()->is('customers')">Customers</x-nav-link>
+                  @endcan
               @endauth
 
             </div>
@@ -59,7 +73,7 @@
             {{-- <p>Welcome back, {{ auth()->user()->name }}!</p>
     <a href="/dashboard">Dashboard</a> --}}
               <x-nav-link href="#">
-                  {{ auth()->user()->name }}
+                  {{ auth()->user()->name }} ({{ Auth::user()->roles->pluck('name')->implode(' , ') }})
               </x-nav-link>
               <form method="POST" action="/logout">
                 <x-nav-link href="/logout">Log Out</x-nav-link>

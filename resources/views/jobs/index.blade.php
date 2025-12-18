@@ -27,12 +27,12 @@
                     </a>
                 </div>
                 <div class="col-3">
-                     @if(auth()->user()->hasRole(['admin']))
+                    @can('view trades')
                         <a href="{{ route('jobs.create') }}" 
                             class="bg-green-600 text-white px-4 py-2 rounded inline-block mt-2">
                             Add Job
                         </a>
-                     @endauth
+                     @endcan
                 </div>
             </div>
         </div>
@@ -85,7 +85,7 @@
 
                     <!-- Actions -->
                     <td class="py-2 px-4">
-                         @if(auth()->user()->hasRole(['admin']))
+                        @can('view trades')
                             {{-- <a href="{{ route('jobs.show', $job->id) }}" 
                             class="bg-blue-600 text-white px-3 py-1 rounded mr-2">
                                 View
@@ -114,7 +114,7 @@
                                     Delete
                                 </button>
                             </form>
-                        @endauth
+                        @endcan
                     </td>
                 </tr>
             @endforeach
