@@ -5,23 +5,6 @@
 
 <form id="jobForm" action="{{ route('jobs.store') }}" method="POST" enctype="multipart/form-data" class="space-y-4" novalidate>
     @csrf
-
-    {{-- <div class="mb-4">
-        <label class="block font-semibold">Customer</label>
-        <select name="customer_id" id="customer_id" class="w-full border p-2 rounded">
-            <option value="">-- Select customer --</option>
-
-            @foreach($customers as $c)
-                <option value="{{ $c->id }}" {{ old('customer_id') == $c->id ? 'selected' : '' }}>
-                    {{ $c->name }} ({{ $c->email ?? 'no email' }})
-                </option>
-            @endforeach
-        </select>
-
-        @error('customer_id')
-            <p class="text-red-600 text-sm">{{ $message }}</p>
-        @enderror
-    </div> --}}
         <div  class="mb-4">
             <label class="block font-semibold">Customer</label>
             <select name="customer_id" id="customer_id" class="w-full border p-2 rounded">
@@ -83,5 +66,7 @@
             Save Job
         </button>
     </form>
+
+    @vite([ 'resources/views/jobs/js/job-form.js'])
 
 </x-layout>

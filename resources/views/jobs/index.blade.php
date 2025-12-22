@@ -33,18 +33,13 @@
                             Add Job
                         </a>
                     @endcan
-                    {{-- <a href="{{ route('jobs.export') }}" class="btn btn-success mt-2">
-                        Excel
-                    </a>
-                    
-                    <a href="{{ route('jobs.export.pdf') }}" class="btn btn-danger mt-2">
-                        PDF
-                    </a> --}}
+                    <a href="{{ route('jobs.export') }}" class="bg-green-600 text-white px-4 py-2 rounded inline-block mt-2">Excel</a>
+                    <a href="{{ route('jobs.export.pdf') }}" class="bg-danger text-white px-4 py-2 rounded inline-block mt-2">PDF</a>
                 </div>
             </div>
         </div>
     </form>
-    <table class="min-w-full bg-white border">
+    <table class="min-w-full bg-white border mt-2">
         <thead>
             <tr class="bg-gray-100 border-b">
                 <th class="py-2 px-4 text-left">Job Title</th>

@@ -105,7 +105,7 @@
 </script>
 
 <script>
-    async function openJobsModal(customerId) {
+    async function openJobsModall(customerId) {
     console.log('Opening jobs modal for customer:', customerId);
 
     const modalBody = document.getElementById('jobsModalBody');

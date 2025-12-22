@@ -93,9 +93,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/customers/export', [CustomerController::class, 'export'])
         ->name('customers.export');
 
-    Route::resource('customers', CustomerController::class);
-
     Route::get('/customers/export/pdf', [CustomerController::class, 'exportPdf'])
         ->name('customers.export.pdf');
+
+    Route::get('/jobs/export', [JobController::class, 'export'])
+        ->name('jobs.export');
+
+    Route::get('/jobs/export/pdf', [JobController::class, 'exportPdf'])
+        ->name('jobs.export.pdf');
 
 });

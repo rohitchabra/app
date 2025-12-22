@@ -12,6 +12,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\JobsExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class JobController extends Controller implements HasMiddleware
 {
@@ -23,6 +26,20 @@ class JobController extends Controller implements HasMiddleware
             new Middleware('permission:create jobs', only: ['create']),
             new Middleware('permission:delete jobs', only: ['destroy'])
         ];
+    }
+
+    public function show()
+    {
+        return Excel::download(new JobsExport, 'jobs.xlsx');
+    }
+
+    public function exportPdf()
+    {
+        $jobs = Job::all();
+
+        $pdf = Pdf::loadView('jobs.pdf', compact('jobs'));
+
+        return $pdf->download('jobs.pdf');
     }
 
     public function index(Request $request)
@@ -116,7 +133,66 @@ class JobController extends Controller implements HasMiddleware
 
     public function update(Request $request, Job $job)
     {
-        //dd('index jobs');
+        $validated = $request->validate([
+            'customer_id' => 'required|exists:customers,id',
+            'title'       => 'required|string|max:255',
+            'description' => 'nullable|string',
+
+            'trade_ids'   => 'required|array',
+            'trade_ids.*' => 'exists:trades,id',
+
+            'photos'      => 'nullable|array|max:5',
+            'photos.*'    => 'image|max:5120', // 5MB each
+        ]);
+
+        DB::beginTransaction();
+
+        try {
+            // Update job
+            $job->update([
+                'customer_id' => $validated['customer_id'],
+                'title'       => $validated['title'],
+                'description' => $validated['description'] ?? null,
+            ]);
+
+            // Sync trades
+            $job->trades()->sync($validated['trade_ids']);
+
+            // Store new photos (optional)
+            if ($request->hasFile('photos')) {
+                foreach ($request->file('photos') as $file) {
+                    $path = $file->store("jobs/{$job->id}", 'public');
+
+                    $job->photos()->create([
+                        'path'     => $path,
+                        'filename' => $file->getClientOriginalName(),
+                        'mime'     => $file->getClientMimeType(),
+                        'size'     => $file->getSize(),
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('jobs.index')
+                ->with('success', 'Job updated successfully.');
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return back()
+                ->withInput()
+                ->withErrors([
+                    'error' => 'Failed to update job: ' . $e->getMessage()
+                ]);
+        }
+    }
+
+
+    public function update1(Request $request, Job $job)
+    {
+        dd('index jobs');
         $validated = $request->validate([
             'customer_id' => 'required|exists:customers,id',
             'title' => 'required|string|max:255',

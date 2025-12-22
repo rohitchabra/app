@@ -2,13 +2,15 @@
     <x-slot:heading>
         
     </x-slot:heading>
-
-    @for ($i = 0; $i < 3; $i++)
+    <h1>Total Customers: {{ $totalCustomers }}</h1>
+    <h1>Total Jobs: {{ $totalJobs }}</h1>
+    <h1>Total Users: {{ $totalUsers }}</h1>
+    {{-- @for ($i = 0; $i < 3; $i++)
         <div class="p-4 mb-4 bg-white rounded shadow">
             <h2 class="text-xl font-semibold mb-2">Card {{ $i + 1 }}</h2>
             <p>This is the content of card {{ $i + 1 }}.</p>
         </div>
-    @endfor
+    @endfor --}}
 
     {{-- @foreach ($products as $product)
         <div class="p-4 mb-4 bg-white rounded shadow">
