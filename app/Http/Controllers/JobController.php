@@ -35,12 +35,13 @@ class JobController extends Controller implements HasMiddleware
 
     public function exportPdf()
     {
-        $jobs = Job::all();
+        $jobs = Job::with(['customer', 'trades', 'photos'])->get();
 
         $pdf = Pdf::loadView('jobs.pdf', compact('jobs'));
 
         return $pdf->download('jobs.pdf');
     }
+
 
     public function index(Request $request)
     {
@@ -48,7 +49,6 @@ class JobController extends Controller implements HasMiddleware
 
         $selectedCustomer = null;
         if ($request->customer_id) {
-            //dd('11');
             $selectedCustomer = Customer::find($request->customer_id);
         }
 
