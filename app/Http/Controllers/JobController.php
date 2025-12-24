@@ -118,8 +118,50 @@ class JobController extends Controller implements HasMiddleware
 
     public function photo(Job $job)
     {
+        
         $job->load(['customer', 'photos', 'trades']);
+        //dd($job->photos);
         return view('jobs.show', compact('job'));
+    }
+
+    public function uploadPhotos(Request $request, Job $job)
+    {
+        $request->validate([
+            'photos.*' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        foreach ($request->file('photos', []) as $photo) {
+            $path = $photo->store('job-photos', 'public');
+
+            $job->photos()->create([
+                'path' => $path,
+            ]);
+        }
+
+        return back()->with('success', 'Selected photos uploaded successfully.');
+
+        // $job->load(['customer', 'photos', 'trades']);
+
+        // return redirect()
+        //     ->route('jobs.show', $job)
+        //     ->with('success', 'Photos uploaded successfully.');
+    }
+
+
+    public function deletePhotos(Request $request)
+    {
+        $request->validate([
+            'photo_ids' => 'required|array',
+        ]);
+
+        $photos = JobPhoto::whereIn('id', $request->photo_ids)->get();
+
+        foreach ($photos as $photo) {
+            Storage::disk('public')->delete($photo->path);
+            $photo->delete();
+        }
+
+        return back()->with('success', 'Selected photos deleted');
     }
 
 
@@ -186,51 +228,6 @@ class JobController extends Controller implements HasMiddleware
                 ->withErrors([
                     'error' => 'Failed to update job: ' . $e->getMessage()
                 ]);
-        }
-    }
-
-
-    public function update1(Request $request, Job $job)
-    {
-        dd('index jobs');
-        $validated = $request->validate([
-            'customer_id' => 'required|exists:customers,id',
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'photos.*' => 'nullable|image|max:5120',
-        ]);
-
-        DB::beginTransaction();
-        try {
-            $job->update([
-                'customer_id' => $validated['customer_id'],
-                'title' => $validated['title'],
-                'description' => $validated['description'] ?? null,
-            ]);
-
-            if ($request->trade_ids) {
-                $job->trades()->sync($request->trade_ids);
-            }
-
-            if ($request->hasFile('photos')) {
-                foreach ($request->file('photos') as $file) {
-                    $path = $file->store('jobs/'.$job->id, 'public');
-                    $job->photos()->create([
-                        'path' => $path,
-                        'filename' => $file->getClientOriginalName(),
-                        'mime' => $file->getClientMimeType(),
-                        'size' => $file->getSize(),
-                    ]);
-                }
-            }
-
-            DB::commit();
-
-            return redirect()->route('jobs.index', $job)->with('success', 'Job updated.');
-        } catch (\Throwable $e) {
-            DB::rollBack();
-
-            return back()->withInput()->withErrors(['error' => 'Failed to update job: '.$e->getMessage()]);
         }
     }
 

@@ -88,11 +88,6 @@
                     <!-- Actions -->
                     <td class="py-2 px-4">
                         @can('edit jobs')
-                            {{-- <a href="{{ route('jobs.show', $job->id) }}" 
-                            class="bg-blue-600 text-white px-3 py-1 rounded mr-2">
-                                View
-                            </a> --}}
-
                             <a href="{{ route('jobs.edit', $job->id) }}" 
                             class="bg-yellow-500 text-white px-3 py-1 rounded mr-2">
                                 Edit
@@ -129,6 +124,7 @@
 
 </x-layout>
 
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 <!-- Your modal HTML here -->
 <script>
     document.addEventListener("DOMContentLoaded", () => {

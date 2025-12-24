@@ -11,6 +11,7 @@ use App\Http\Controllers\TradeController;
 use App\Http\Controllers\UserController;
 use App\Models\Job;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JobPhotoController;
 
 Route::resource('users', UserController::class);
 Route::resource('customers', CustomerController::class);
@@ -79,6 +80,17 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/jobs/{job}/photo', [JobController::class, 'photo'])->name('photo');
 
+    Route::get('/jobs/export', [JobController::class, 'export'])->name('jobs.export');
+    
+    Route::get('/jobs/export/pdf', [JobController::class, 'exportPdf'])->name('jobs.export.pdf');
+
+    Route::post('/jobs/{job}/photos', [JobController::class, 'uploadPhotos'])
+    ->name('jobs.photos.upload');
+
+    Route::delete('/jobs/photos/bulk-delete', [JobController::class, 'deletePhotos'])
+    ->name('jobs.photos.bulk-delete');
+
+
     // Route::get('/roles', [RoleController::class, 'roles'])->name('roles');
     Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
@@ -95,11 +107,5 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/customers/export/pdf', [CustomerController::class, 'exportPdf'])
         ->name('customers.export.pdf');
-
-    Route::get('/jobs/export', [JobController::class, 'export'])
-        ->name('jobs.export');
-
-    Route::get('/jobs/export/pdf', [JobController::class, 'exportPdf'])
-        ->name('jobs.export.pdf');
 
 });
