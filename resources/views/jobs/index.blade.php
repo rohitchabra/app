@@ -120,32 +120,15 @@
     </table>
 
     {{-- @include('jobs.modals.jobs') --}}
-    @include('jobs.modals.photo')
+    {{-- @include('jobs.modals.photo') --}}
+    @include('jobs.modal.show')
 
 </x-layout>
 
-<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
-<!-- Your modal HTML here -->
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        document.querySelectorAll('.view-photo-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                let jobId = this.getAttribute('data-id');
 
-                fetch(`/jobs/${jobId}/photo`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.getElementById('JModalBody').innerHTML = html;
-                        //console.log(html);
-                        let modalEl = document.getElementById('photoModal');
-                        let modal = new bootstrap.Modal(modalEl);
-                        modal.show();
-                    });
-            });
-        });
-    });
-    </script>
-    
+@vite([ 'resources/views/jobs/js/show.js'])
+
+
     
     
     

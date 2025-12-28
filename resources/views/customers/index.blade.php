@@ -60,7 +60,7 @@
                         @endcan
                         @can('delete customers')
                             <button 
-                                class="bg-red-600 text-white px-2 py-1 rounded"
+                                class="btn btn-danger"
                                 data-bs-toggle="modal"
                                 data-bs-target="#deleteCustomerModal{{ $customer->id }}">
                                 Delete
