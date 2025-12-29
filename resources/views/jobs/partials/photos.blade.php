@@ -51,10 +51,6 @@
             >
             Delete Selected
         </button>
-
-        <button type="button" class="btn btn-secondary" id="closeModal">
-            Close
-        </button>
     </div>
 
     <div class="grid grid-cols-4 gap-4 mt-6">
