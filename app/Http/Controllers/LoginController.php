@@ -25,7 +25,7 @@ class LoginController extends Controller
     // Show login page
     public function create()
     {
-        $roles = Role::all();
+        //$roles = Role::all();
 
         return view('auth.login');
     }

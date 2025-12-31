@@ -94,7 +94,7 @@
     {{-- @include('customers.modals.partials.jobs-list') --}}
 
     {{-- JS --}}
-    @vite([ 'resources/views/customers/js/customer-form.js'])
+    @vite([ 'resources/js/customers/customer-form.js'])
 
 </x-layout>
 

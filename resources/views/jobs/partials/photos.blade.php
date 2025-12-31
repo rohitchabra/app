@@ -34,7 +34,8 @@
         Upload
     </button>
 </form> 
-<form method="POST" action="{{ route('jobs.photos.bulk-delete') }}">
+<form method="POST" action="{{ route('jobs.photos.bulk-delete') }}" 
+    class="mt-6">
     @csrf
     @method('DELETE')
     <div class="flex gap-3 mt-4">

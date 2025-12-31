@@ -44,7 +44,7 @@ class PhotoController extends Controller
         $request->validate([
             'photo_ids' => 'required|array',
         ]);
-
+        
         $photos = JobPhoto::whereIn('id', $request->photo_ids)->get();
 
         foreach ($photos as $photo) {
@@ -54,6 +54,7 @@ class PhotoController extends Controller
 
         return back()->with('success', 'Selected photos deleted');
     }
+
     
 }
 
